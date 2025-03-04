@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='js/script.js') }}"
+            defer
+        ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../static/css/bootstrap.css"
+        />
+        <title>KitchenQuest - Search for Spells</title>
+    </head>
+    <body>
+        <div class="header-left">
+            <h1 class="h1 text-warning">KitchenQuest</h1>
+            <p class="h5 text-warning">Track Ingredients | Fight Bosses | Eat Well</p>
+        </div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/dashboard"
+                            >Dashboard</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/ingredients/search"
+                            >Search Ingredients</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/recipes/search"
+                            >Search Recipes</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/logout"
+                            >Logout</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <main>
+            <div class="container">
+            <h2>Ingredient Search</h2>
+            <input type="text" id="search_string" />
+            <button class="btn btn-primary"
+
+                onclick="ingredient_lookup(document.querySelector('#ingredient_search_results'), search_string.value)"
+            >
+                Search
+            </button>
+                <table class="table table-light" id="ingredient_search_results">
+                    <thead>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </main>
+    </body>
+</html>

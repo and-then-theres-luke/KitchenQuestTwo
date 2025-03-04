@@ -1,0 +1,61 @@
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    border: 2px solid black;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.header h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 0px;
+}
+
+.header p {
+    margin-top: 10px;
+}
+
+.header-left {
+    align-items: center;
+    justify-content: center;
+}
+
+.header-right {
+    align-items: center;
+    justify-content: center;
+    margin-right: 40px;
+}
+
+form button {
+    width: 200px;
+}
+
+/* Dashboard Styling */
+
+.dashboard_main {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    gap: 20px;
+}
+
+body {
+    margin: auto;
+    width: 90%;
+    background-image: url(../images/Pixel_Art_Background.jpg);
+    background-repeat: repeat-x;
+    background-color: #241d2c;
+}
+
+main {
+    background-color: white;
+    height: auto;
+}
+
+.spellfound td {
+    color: green;
+}

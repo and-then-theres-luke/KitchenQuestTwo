@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+            />
+            <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='js/script.js') }}"
+            ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../static/css/bootstrap.css"
+            />
+            <title>KitchenQuest - Dashboard</title>
+        </head>
+        <body>
+            <div class="header-left">
+                <h1 class="h1 text-warning">KitchenQuest</h1>
+            </div>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/dashboard"
+                                >Dashboard</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/ingredients/search"
+                                >Search Spells</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/recipes/search"
+                                >Search Bosses</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link active"
+                                aria-current="page"
+                                href="/logout"
+                                >Logout</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <main class="container-m dashboard_main">
+            <div class="row">
+                
+                <div class="col col-md-8 dashboard_left_col">
+                    <h2>Current XP: {{one_user.xp}}</h2>
+                    <h2>Spellbook</h2>
+                    <table
+                        id="spellbook_table"
+                        class="table"
+                    >
+                        <thead>
+                            <th scope="col">Spell</th>
+                            <th scope="col">Remaining Charges</th>
+                            <!-- Progress Bar -->
+                            <th scope="col"></th>
+                            <th scope="col">Expiration Date</th>
+                        </thead>
+                        <tbody>
+                            {% for spell in spellbook%}
+                            <tr>
+                                <!-- Spell -->
+                                <td>
+                                    <a href="/spells/view/{{spell.id}}"
+                                        >{{spell.name}}</a
+                                    >
+                                </td>
+                                <!-- Remaining Charges -->
+                                <td>{{spell.current_charges}}</td>
+                                <!-- Progress Bar -->
+                                <td>
+                                    <div id="progress_for_{{spell.id}}"></div>
+                                    <script>
+                                        expiration_bars(
+                                            document.querySelector(
+                                                "#progress_for_{{spell.id}}"
+                                            ),
+                                            `{{spell.expiration_date}}`
+                                        );
+                                    </script>
+                                </td>
+                                <!-- Expiration Date -->
+                                <td>{{spell.expiration_date}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col col-md-4 dashboard_right_col">
+                    <h2>Bosses</h2>
+                    {% with messages = get_flashed_messages()%} {% if messages%} {% for
+                        message in messages %}
+                        <p style="color: red">{{ message }}</p>
+                        {% endfor %} {% endif %} {% endwith %}
+                    {% with bosses = one_user.bosses %} {% for boss in
+                            bosses %}
+                            <div class="card" style="width: 18rem;">
+                                <img src="{{boss.image_url}}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{boss.title}}</h5>
+                                    <p class="card-body">XP Value: {{boss.xp_value}}</p>
+                                    <a href="/bosses/defeat/{{boss.id}}" class="btn btn-primary">Defeat</a>
+                                    <a href="/bosses/delete/{{boss.id}}" class="btn btn-primary">Delete</a>
+                                    <a href="/bosses/view/{{boss.id}}" class="btn btn-primary">View</a>
+                                </div>
+                            </div>
+                            {% endfor %} {% endwith %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

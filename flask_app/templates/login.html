@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='js/script.js') }}"
+            defer
+        ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ url_for('static', filename='css/style.css') }}"
+        />
+        <title>KitchenQuest - Login</title>
+    </head>
+    <body>
+        <h1>Welcome to KitchenQuest!</h1>
+        <h2>Please login or make an account to continue...</h2>
+        <!-- Flash messages for registration errors -->
+        {% with messages = get_flashed_messages(category_filter = ['register'])
+        %} {% if messages %} {% for message in messages %}
+        <p style="color: red">{{message}}</p>
+        {% endfor %} {% endif %} {% endwith %}
+        <!-- Flash messages for when a user tries to access pages without being logged in -->
+        {% with messages = get_flashed_messages(category_filter = ['login']) %}
+        {% for message in messages %}
+        <p style="color: red">{{message}}</p>
+        {% endfor %} {% endwith %}
+        <div>
+            <h3>Login</h3>
+            <form
+                action="/login/process"
+                method="POST"
+            >
+                <label
+                    >Email:
+                    <input
+                        type="email"
+                        name="email"
+                /></label>
+                <label
+                    >Password:
+                    <input
+                        type="password"
+                        name="password"
+                /></label>
+                <button>Submit</button>
+            </form>
+            <h3>Register</h3>
+            <form
+                action="/register"
+                method="POST"
+            >
+                <label
+                    >First Name:<input
+                        type="text"
+                        name="first_name"
+                /></label>
+                <label
+                    >Last Name:<input
+                        type="text"
+                        name="last_name"
+                /></label>
+                <label
+                    >Email:<input
+                        type="email"
+                        name="email"
+                /></label>
+                <label
+                    >Password:<input
+                        type="password"
+                        name="password"
+                /></label>
+                <label
+                    >Confirm Password:<input
+                        type="password"
+                        name="confirm_password"
+                /></label>
+                <button>Submit</button>
+            </form>
+        </div>
+    </body>
+</html>
