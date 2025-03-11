@@ -32,7 +32,7 @@ const spell_lookup = async (table, search_string) => {
         const actionsCellElement = document.createElement("td");
         const actionsAddToSpellbook = document.createElement("a");
         actionsAddToSpellbook.textContent = "Add to Spellbook";
-        actionsAddToSpellbook.href = "/ingredients/show_one/" + row.id;
+        actionsAddToSpellbook.href = "/spells/show_one/" + row.id;
 
         actionsCellElement.appendChild(actionsAddToSpellbook);
         rowElement.appendChild(actionsCellElement);

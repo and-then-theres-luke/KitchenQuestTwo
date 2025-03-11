@@ -14,7 +14,7 @@
         <link
             rel="stylesheet"
             type="text/css"
-            href="../static/css/bootstrap.css"
+            href="/static/css/bootstrap.css"
         />
         <title>KitchenQuest - View {{one_spell.name}} Spell</title>
     </head>
@@ -65,20 +65,11 @@
         <main>
             <h1>{{ one_spell.name }} Spell</h1>
             <img
-                src="https://spoonacular.com/cdn/ingredients_500x500/{{
-                    one_spell.id
-                }}"
+                src="{{ one_spell.image }}"
                 alt=""
             />
-            <p>Number of Charges: {{ one_spell.current_charges }}</p>
             <p>
-                One Charge is equal to: {{one_spell.charge_amount}}
-                {{one_spell.charge_unit}}
-            </p>
-            <p>Expires On: {{one_spell.expiration_date}}</p>
-            <p>
-                <a href="/spells/edit/{{one_spell.id}}">Edit</a> |
-                <a href="/spells/delete/{{one_spell.id}}">Delete</a>
+                How Many Servings?
             </p>
         </main>
     </body>
