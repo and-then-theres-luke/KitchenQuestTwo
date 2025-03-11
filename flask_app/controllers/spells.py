@@ -11,3 +11,9 @@ def view_spell_frontend(id):
     one_spell = spell.Spell.get_spell_by_id(id)
     return render_template('one_spell.html', one_spell = one_spell)
 
+#Read
+@app.route('/spells/search')
+def spell_search_frontend():
+    if 'user_id' not in session:
+        return redirect("/login")
+    return render_template("spell_search.html")

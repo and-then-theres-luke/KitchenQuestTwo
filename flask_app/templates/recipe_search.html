@@ -16,7 +16,7 @@
             type="text/css"
             href="../static/css/bootstrap.css"
         />
-        <title>KitchenQuest - Search for Spells</title>
+        <title>KitchenQuest - Recipe Search for Bosses</title>
     </head>
     <body>
         <div class="header-left">
@@ -38,8 +38,8 @@
                         <a
                             class="nav-link active"
                             aria-current="page"
-                            href="/spells/search"
-                            >Search Spells</a
+                            href="/ingredients/search"
+                            >Search Ingredients</a
                         >
                     </li>
                     <li class="nav-item">
@@ -64,20 +64,16 @@
     </nav>
         <main>
             <div class="container">
-            <h2>Ingredient Search</h2>
-            <!-- Search Function -->
-            <input type="text" id="search_string" />
-
-            <button class="btn btn-primary"
-
-            
-                onclick="spell_lookup(document.querySelector('#ingredient_search_results'), search_string.value)" 
-            >
-                Search
-            </button>
-            <!-- Function End -->
-                <table class="table table-light" id="ingredient_search_results">
+                <h2>Recipe Search</h2>
+                <input type="text" id="search_string"/>
+                <button class="btn btn-primary"
+                    onclick="recipe_lookup(document.querySelector('#recipe_search_results'), search_string.value)"
+                >
+                    Search
+                </button>
+                <table class="table table-light" id="recipe_search_results">
                     <thead>
+                        <th>Id</th>
                         <th>Name</th>
                         <th>Image</th>
                         <th>Actions</th>

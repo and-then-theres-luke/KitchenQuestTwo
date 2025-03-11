@@ -7,7 +7,7 @@ const open_ingredient_window = (passed_data) => {
     );
 };
 
-const ingredient_lookup = async (table, search_string) => {
+const spell_lookup = async (table, search_string) => {
     let tableBody = table.querySelector("tbody");
     let res = await fetch(
         `https://api.spoonacular.com/food/ingredients/search?apiKey=e5435bd9712a45208d0da9ad28db16b2&query=${search_string}`
@@ -17,10 +17,6 @@ const ingredient_lookup = async (table, search_string) => {
     tableBody.innerHTML = "";
     for (const row of results) {
         const rowElement = document.createElement("tr");
-        let idCellElement = document.createElement("td");
-        idCellElement.textContent = row.id;
-        rowElement.appendChild(idCellElement);
-
         const nameCellElement = document.createElement("td");
         nameCellElement.textContent = row.name;
         rowElement.appendChild(nameCellElement);
@@ -35,7 +31,7 @@ const ingredient_lookup = async (table, search_string) => {
 
         const actionsCellElement = document.createElement("td");
         const actionsAddToSpellbook = document.createElement("a");
-        actionsAddToSpellbook.textContent = "Convert to Spell";
+        actionsAddToSpellbook.textContent = "Add to Spellbook";
         actionsAddToSpellbook.href = "/ingredients/show_one/" + row.id;
 
         actionsCellElement.appendChild(actionsAddToSpellbook);
