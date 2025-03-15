@@ -68,9 +68,29 @@
                 src="{{ one_spell.image }}"
                 alt=""
             />
-            <p>
-                How Many Servings?
-            </p>
+            <form action="/spells/add_to_spellbook/" method="POST">
+                <label>How Many Servings?</label>
+                <input type="float" name="servings">
+                <label>One serving is equal to:</label>
+                <input type="float" name="serving_value" />
+                <select name="serving_unit">
+                    {% with possibleUnits = one_spell.possibleUnits %} {%
+                        for item in possibleUnits %}
+                        <option value="{{item}}">{{item}}</option>
+                        {% endfor %} {% endwith %}
+                </select>
+                <input type="submit" value="Add to Spellbook">
+                <!-- Hidden Values -->
+                <input type="hidden" name="image" value="{{ one_spell.image }}">
+                <input type="hidden" name="id" value="{{ one_spell.id }}">
+                <input type="hidden" name="user_id" value="{{ session['user_id'] }}">
+                <input type="hidden" name="isFrozen" value="0">
+            </form>
+            <div>
+            <p>How do I know how many servings I have?</p>
+            <p>Check the nutrition label on the back:</p>
+            <img src="/static/images/nutrition_facts.JPG" alt="">
+            </div>
         </main>
     </body>
 </html>

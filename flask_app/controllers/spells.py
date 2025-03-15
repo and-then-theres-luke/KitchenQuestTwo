@@ -19,4 +19,6 @@ def show_spell_frontend(id):
         return redirect("/login")
     one_spell = spell.Spell.get_spell_by_api_id(id)
     return render_template('one_spell.html', one_spell = one_spell)
+
+@app.route('/spells/add_to_spellbook' method="POST")
     
