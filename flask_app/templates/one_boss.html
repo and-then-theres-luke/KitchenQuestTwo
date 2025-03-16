@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <script
+            type="text/javascript"
+            src="{{ url_for('static', filename='js/script.js') }}"
+            defer
+        ></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href='../../../static/css/bootstrap.css'
+        />
+        <title>KitchenQuest - Edit {{one_boss.id}}</title>
+    </head>
+    <body>
+        <div class="header-left">
+            <h1 class="h1 text-warning">KitchenQuest</h1>
+            <p class="h5 text-warning">Track Ingredients | Fight Bosses | Eat Well</p>
+        </div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/dashboard"
+                            >Dashboard</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/ingredients/search"
+                            >Search Ingredients</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/recipes/search"
+                            >Search Recipes</a
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            aria-current="page"
+                            href="/logout"
+                            >Logout</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+        <main>
+            <h2>{{one_boss.title}}</h2>
+            <img
+                src="{{one_boss.image_url}}"
+                alt=""
+            />
+            <p>XP Value: {{one_boss.xp_value}}</p>
+                <table class="table" id="recipe_ingredient_table">
+                    <thead>
+                        <th>Spell</th>
+                        <th>Recipe Calls For</th>
+                        <th>Spell in Spellbook?</th>
+                        <th>One Charge is Equal To</th>
+                        <th>Charges Needed</th>
+                        <th>Enough Charges?</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        {% with required_spells = one_boss.required_spells%}
+                        {% for one_required_spell in required_spells %}
+                        <tr>
+                            {% if one_required_spell.isSpell == False %}
+                            <!-- Spell -->
+                            <td>{{one_required_spell.name}}</td>
+                            <!-- Recipe Calls For -->
+                            <td>{{one_required_spell.amount}} {{one_required_spell.unit}}</td>
+                            <!-- Spell in Spellbook? -->
+                            <td>No</td>
+                            <!-- One Charge is Equal To -->
+                            <td>--</td>
+                            <!-- Charges Needed -->
+                            <td>--</td>
+                            <!-- Enough Charges? -->
+                            <td>--</td>
+                            <!-- Actions -->
+                            <td><a class="btn btn-primary"
+                                href="/ingredients/show_one/{{one_required_spell.api_ingredient_id}}"
+                                >Add To Spellbook</a
+                            > <a class="btn btn-danger" href="/required_spells/delete/{{one_required_spell.id}}/{{one_boss.id}}">Remove from Boss</a></td>
+                            {% else %}
+                            <!-- Spell -->
+                            <td>{{one_required_spell.name}}</td>
+                            <!-- Recipe Calls For -->
+                            <td>{{one_required_spell.amount}} {{one_required_spell.unit}}</td>
+                            <!-- Spell in Spellbook? -->
+                            <td>Yes</td>
+                            <!-- One Charge is Equal To -->
+                            <td>{{one_required_spell.charge_amount}} {{one_required_spell.charge_unit}}</td>
+                            <!-- Charges Needed -->
+                            <td>{{one_required_spell.charges_needed}}</td>
+                            <!-- Enough Charges? -->
+                            {% if one_required_spell.isEnoughCharges == True %}
+                            <td>Yes</td>
+                            {% else %}
+                            <td>No</td>
+                            {% endif %}
+                            <!-- Actions -->
+                            <td><a class="btn btn-primary"
+                                href="/ingredients/show_one/{{one_required_spell.api_ingredient_id}}"
+                                >Add To Spellbook</a
+                            > <a class="btn btn-danger" href="/required_spells/delete/{{one_required_spell.id}}/{{one_boss.id}}">Remove from Boss</a></td>
+                            {% endif %}
+
+                        </tr>
+                        {% endfor %}
+                        {% endwith %}
+                    </tbody>
+                    
+                </table>
+                    <a href="/bosses/defeat/{{one_boss.id}}">Defeat This Boss</a>
+            </form>
+        </main>
+    </body>
+</html>

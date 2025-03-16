@@ -1,4 +1,4 @@
-from flask_app import app
+from flask_app import app, api_key
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app.models import user
 from datetime import date, timedelta
@@ -19,14 +19,14 @@ class Spell:
 
     #API Pulls (Read Spell From API)
     @classmethod
-    def get_spell_by_api_ingredient_id(cls, api_ingredient_id):
-        res = requests.get("https://api.spoonacular.com/food/ingredients/" + api_ingredient_id + "/information?apiKey=" + API_KEY)
+    def get_spell_by_api_id(cls, api_ingredient_id):
+        res = requests.get("https://api.spoonacular.com/food/ingredients/" + str(api_ingredient_id) + "/information?apiKey=" + "e5435bd9712a45208d0da9ad28db16b2")
         one_spell = res.json()
         data = {
-            'api_ingredient_id' : one_spell['id'],
-            'name' : one_spell['name'],
+            'api_spell_id' : one_spell['id'],
+            'name' : (one_spell['name'].capitalize()),
             'aisle' : one_spell['aisle'],
-            'image' : one_spell['image'],
+            'image' : str("https://spoonacular.com/cdn/ingredients_500x500/" + one_spell['image']),
             'possibleUnits' : one_spell['possibleUnits']
         }
         return cls(data)
