@@ -1,5 +1,5 @@
 from flask_app import app
-from flask_app.controllers import users, spells #controllers go here, 
+from flask_app.controllers import users, spells, recipes #controllers go here, 
 # If you add a new controller file you have to also add it here
 # This is where Flask's thought process starts. The request enters here, then goes to the controller above which has a matching route.
 

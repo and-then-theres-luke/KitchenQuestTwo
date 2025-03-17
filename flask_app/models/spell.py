@@ -10,12 +10,8 @@ class Spell:
     def __init__(self, data):
         self.api_spell_id = data['api_spell_id']        #This is used to match up with spells in the api.
         self.name = data['name']                        #Spell Name
-        self.aisle = data['aisle']
         self.image = data['image']
-        self.possibleUnits = data['possibleUnits']
-        
-
-
+        self.possible_units = data['possibleUnits']
 
     #API Pulls (Read Spell From API)
     @classmethod
@@ -32,18 +28,18 @@ class Spell:
         return cls(data)
 
     @staticmethod
-    def convert_amounts(api_ingredient_id, charge_amount, charge_unit, target_unit):
-        print(api_ingredient_id, charge_amount, charge_unit, target_unit)
+    def convert_amounts(api_spell_id, serving_amount, serving_unit, target_unit):
+        print(api_spell_id, serving_amount, serving_unit, target_unit)
         if target_unit == "":
-            targetAmount = charge_amount
+            targetAmount = serving_amount
         else:
-            query = """https://api.spoonacular.com/recipes/convert?ingredientName=""" + str(api_ingredient_id) + """&sourceAmount=""" + str(charge_amount) + """&sourceUnit=""" + str(charge_unit) + """&targetUnit=""" + str(target_unit) + """&apiKey=""" + str(API_KEY)
-            print("Converting " + str(charge_amount) + " " + str(charge_unit) + "to " + str(target_unit))
+            query = """https://api.spoonacular.com/recipes/convert?ingredientName=""" + str(api_spell_id) + """&sourceAmount=""" + str(serving_amount) + """&sourceUnit=""" + str(serving_unit) + """&targetUnit=""" + str(target_unit) + """&apiKey=""" + str(API_KEY)
+            print("Converting " + str(serving_amount) + " " + str(serving_unit) + "to " + str(target_unit))
             res = requests.get(query)
             results = res.json()
             print(results)
             targetAmount = results['targetAmount']
-            print("Result is: " + str(charge_amount) + " " + str(charge_unit) + " is equal to " + str(targetAmount) + " " + str(target_unit))
+            print("Result is: " + str(serving_amount) + " " + str(serving_unit) + " is equal to " + str(targetAmount) + " " + str(target_unit))
         return targetAmount
 
 class Userspell(Spell):
@@ -52,21 +48,54 @@ class Userspell(Spell):
         super().__init__(data)
         self.id = data['id']                            #Unique id for this spell
         self.user_id = data['user_id']                  #This is what we use to build a user's spellbook
-        self.current_charges = data['current_charges']  #Number of units left in the spell
-        self.charge_unit = data['charge_unit']          #Let's say there are 8 servings of milk in a container. In the spellbook that would be represented as Current charges = 8, where one charge equals {{charge_amount}} {{charge_unit}} or in this case, 1 cup.
+        self.current_servings = data['current_servings']  #Number of units left in the spell
+        self.serving_value = data['serving_value']
+        self.serving_unit = data['serving_unit']          #Let's say there are 8 servings of milk in a container. In the spellbook that would be represented as Current charges = 8, where one charge equals {{charge_amount}} {{charge_unit}} or in this case, 1 cup.
         self.isFrozen = data['isFrozen']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         
     #Create Spell
     @classmethod
-    def add_spell_to_spellbook(cls, data):
+    def add_to_spellbook(cls, data):
+        print(data)
         if data['isFrozen'] == 'on':
             data['isFrozen'] = 1
         else:  
             data['isFrozen'] = 0
         if not cls.validate_new_spell(data):
             return False
+        data['max_servings'] = data['current_servings']
+        query = """
+        INSERT INTO spells 
+                (
+                    user_id, 
+                    api_spell_id,
+                    name,
+                    current_servings,
+                    max_servings,
+                    serving_value,
+                    serving_unit,
+                    expiration_date,
+                    isFrozen
+                ) 
+            VALUES 
+                (
+                    %(user_id)s, 
+                    %(api_spell_id)s,
+                    %(name)s,
+                    %(current_servings)s,
+                    %(max_servings)s,
+                    %(serving_value)s,
+                    %(serving_unit)s,
+                    %(expiration_date)s,
+                    %(isFrozen)s
+                )
+            ;
+        """
+        if not connectToMySQL(cls.db).query_db(query, data):
+            return False
+        return True
     
     #Read Spellbook
     @classmethod 
@@ -77,16 +106,16 @@ class Userspell(Spell):
         }
         query = """
         SELECT *
-        FROM userspell
+        FROM spells
         WHERE user_id = %(id)s
         ;
         """
         results = connectToMySQL(cls.db).query_db(query,data)
+        print(results)
         if results == False:
             return spellbook
         for item in results:
             spellbook.append(cls(item))
-            print(type(cls(item)))
         return spellbook
     
     # Validation Methods
@@ -94,7 +123,7 @@ class Userspell(Spell):
     def validate_new_spell(data):
         isValid = True
         today = str(date.today())
-        if int(data['current_charges']) <= 0:
+        if int(data['current_servings']) <= 0:
             flash("Your ingredient needs at least one charge before you can add it to your pantry deck. Try again.","new_spell")
             isValid = False
         if data['expiration_date'] < today:

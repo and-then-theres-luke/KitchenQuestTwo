@@ -70,21 +70,26 @@
             />
             <form action="/spells/add_to_spellbook/" method="POST">
                 <label>How Many Servings?</label>
-                <input type="float" name="servings">
+                <input type="float" name="current_servings">
                 <label>One serving is equal to:</label>
                 <input type="float" name="serving_value" />
                 <select name="serving_unit">
-                    {% with possibleUnits = one_spell.possibleUnits %} {%
-                        for item in possibleUnits %}
+                    {% with possible_units = one_spell.possible_units %} {%
+                        for item in possible_units %}
                         <option value="{{item}}">{{item}}</option>
                         {% endfor %} {% endwith %}
                 </select>
+                <label>Expiration Date: <input type="date" name="expiration_date"></label>
                 <input type="submit" value="Add to Spellbook">
                 <!-- Hidden Values -->
                 <input type="hidden" name="image" value="{{ one_spell.image }}">
                 <input type="hidden" name="id" value="{{ one_spell.id }}">
                 <input type="hidden" name="user_id" value="{{ session['user_id'] }}">
                 <input type="hidden" name="isFrozen" value="0">
+                <input type="hidden" name="api_spell_id" value="{{ one_spell.api_spell_id }}">
+                <input type="hidden" name="name" value="{{ one_spell.name }}">
+                <input type="hidden" name="possible_units" value="{{ one_spell.possibleUnits }}">
+                <input type="hidden" name="is_frozen" value=0>
             </form>
             <div>
             <p>How do I know how many servings I have?</p>
